@@ -13,8 +13,10 @@ export default (editor: Editor) => {
         droppable: componentsToQuery([
           'mj-preview',
           'mj-attributes',
+          'mj-breakpoint',
           'mj-style',
           'mj-font',
+          'mj-html-attributes',
           'mj-title',
           'mj-raw'
         ]),

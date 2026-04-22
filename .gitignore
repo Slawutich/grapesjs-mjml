@@ -1,8 +1,8 @@
 .DS_Store
 private/
 node_modules/
-dist/
-locale/
+# dist/
+# locale/
 .eslintrc
 .npmrc
 *.log

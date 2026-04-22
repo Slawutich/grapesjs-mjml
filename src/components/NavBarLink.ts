@@ -61,8 +61,9 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
       /**
        * #305 prevent content repeating
        */
-      rerender() {
+      async rerender() {
         this.render();
+        return await this.__renderPromise;
       },
 
       getTemplateFromEl(sandboxEl: any) {

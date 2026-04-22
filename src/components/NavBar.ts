@@ -49,12 +49,13 @@ export default (editor: Editor, { opt, coreMjmlModel, coreMjmlView, sandboxEl }:
         this.listenTo(this.model.get('components'), 'add remove update', this.render);
       },
 
-      getTemplateFromMjml() {
+      async getTemplateFromMjml() {
         const mjmlTmpl = this.getMjmlTemplate();
         const innerMjml = this.getInnerMjmlTemplate();
-        const htmlOutput = mjmlConvert(
+        const mjmlStart = this.injectDocumentHead(mjmlTmpl.start);
+        const htmlOutput = await mjmlConvert(
           opt.mjmlParser,
-          `${mjmlTmpl.start}
+          `${mjmlStart}
           ${innerMjml.start}${innerMjml.end}${mjmlTmpl.end}`,
           opt.fonts,
         );
@@ -91,15 +92,29 @@ export default (editor: Editor, { opt, coreMjmlModel, coreMjmlView, sandboxEl }:
       },
 
       render() {
+        const renderId = (this.__renderId || 0) + 1;
+        this.__renderId = renderId;
         this.renderAttributes();
-        const mjmlResult = this.getTemplateFromMjml();
-        this.el.innerHTML = mjmlResult.content;
-        this.$el.attr(mjmlResult.attributes);
-        editor.addComponents(`<style>${mjmlResult.style}</style>`);
-        this.getChildrenContainer().innerHTML = this.model.get('content')!;
-        this.renderChildren();
-        this.renderStyle();
-        this.postRender();
+        this.__renderPromise = Promise.resolve(this.getTemplateFromMjml())
+          .then((mjmlResult: any) => {
+            if (this.__renderId !== renderId) {
+              return this;
+            }
+
+            this.el.innerHTML = mjmlResult.content;
+            this.$el.attr(mjmlResult.attributes);
+            editor.addComponents(`<style>${mjmlResult.style}</style>`);
+            this.getChildrenContainer().innerHTML = this.model.get('content')!;
+            this.renderChildren();
+            this.renderStyle();
+            this.postRender();
+
+            return this;
+          })
+          .catch((error: Error) => {
+            editor.log(error.message, { level: 'error' });
+            return this;
+          });
 
         return this;
       },
@@ -119,14 +134,14 @@ export default (editor: Editor, { opt, coreMjmlModel, coreMjmlView, sandboxEl }:
         return 'div.mj-inline-links';
       },
 
-      rerender() {
-        coreMjmlView.rerender.call(this);
-        this.model.components().models.forEach((item: any) => {
+      async rerender() {
+        await coreMjmlView.rerender.call(this);
+        await Promise.all(this.model.components().models.map(async (item: any) => {
           if (item.attributes.type != typeNavBarLink) {
             return;
           }
-          item.view.rerender();
-        });
+          await item.view.rerender();
+        }));
       },
     },
   });

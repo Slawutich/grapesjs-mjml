@@ -39,8 +39,9 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
       ...coreMjmlView,
       tagName: 'div',
       attributes: { style: 'min-height: 100vh' },
-      rerender() {
+      async rerender() {
         this.render();
+        return await this.__renderPromise;
       },
       getTemplateFromMjml() {
         return '';

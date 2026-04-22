@@ -1,9 +1,12 @@
 {
   "extends": "./node_modules/grapesjs-cli/dist/template/tsconfig.json",
   "include": ["src", "tests"],
+  "exclude": ["node_modules"],
   "compilerOptions": {
-    "target": "es5",
+    "ignoreDeprecations": "6.0",
+    "target": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true
+    "allowJs": true,
+    "types": ["jest"]
   }
 }

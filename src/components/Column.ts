@@ -48,12 +48,13 @@ export default (editor: Editor, { opt, coreMjmlModel, coreMjmlView, sandboxEl }:
         style: clmPadd ? `padding: ${clmPadd};` : '',
       },
 
-      getTemplateFromMjml() {
+      async getTemplateFromMjml() {
         const mjmlTmpl = this.getMjmlTemplate();
         const innerMjml = this.getInnerMjmlTemplate();
-        const htmlOutput = mjmlConvert(
+        const mjmlStart = this.injectDocumentHead(mjmlTmpl.start);
+        const htmlOutput = await mjmlConvert(
           opt.mjmlParser,
-          `${mjmlTmpl.start}
+          `${mjmlStart}
           ${innerMjml.start}${innerMjml.end}${mjmlTmpl.end}`,
           opt.fonts,
         );
@@ -90,18 +91,32 @@ export default (editor: Editor, { opt, coreMjmlModel, coreMjmlView, sandboxEl }:
       },
 
       render() {
+        const renderId = (this.__renderId || 0) + 1;
+        this.__renderId = renderId;
         this.renderAttributes();
-        const mjmlResult = this.getTemplateFromMjml();
-        this.el.innerHTML = mjmlResult.content;
-        this.$el.attr(mjmlResult.attributes);
-        editor.addComponents(`<style>${mjmlResult.style}</style>`);
-        this.getChildrenContainer().innerHTML = this.model.get('content')!;
-        this.renderChildren();
-        this.renderStyle();
+        this.__renderPromise = Promise.resolve(this.getTemplateFromMjml())
+          .then((mjmlResult: any) => {
+            if (this.__renderId !== renderId) {
+              return this;
+            }
 
-        // In case mjmlResult.attributes removes necessary stuff
-        this.updateStatus();
-        this.postRender();
+            this.el.innerHTML = mjmlResult.content;
+            this.$el.attr(mjmlResult.attributes);
+            editor.addComponents(`<style>${mjmlResult.style}</style>`);
+            this.getChildrenContainer().innerHTML = this.model.get('content')!;
+            this.renderChildren();
+            this.renderStyle();
+
+            // In case mjmlResult.attributes removes necessary stuff
+            this.updateStatus();
+            this.postRender();
+
+            return this;
+          })
+          .catch((error: Error) => {
+            editor.log(error.message, { level: 'error' });
+            return this;
+          });
 
         return this;
       },
@@ -112,6 +127,7 @@ export default (editor: Editor, { opt, coreMjmlModel, coreMjmlView, sandboxEl }:
         const stylable = model.get('stylable') as string[];
         const styles = Object.keys(modelStyle)
           .filter((prop) => stylable.indexOf(prop) > -1)
+          //@ts-ignore
           .map((prop) => `${prop}:${modelStyle[prop]};`);
         const styleResult = `${attributes.style} ${styles.join(' ')} ${el.getAttribute('style')}`;
         el.setAttribute('style', styleResult);

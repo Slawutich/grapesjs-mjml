@@ -8,6 +8,46 @@ import loadPanels from './panels';
 import loadStyle from './style';
 import { PluginOptions } from './types';
 
+const headComponentTypes = new Set([
+  'mj-attributes',
+  'mj-breakpoint',
+  'mj-font',
+  'mj-html-attributes',
+  'mj-preview',
+  'mj-style',
+  'mj-title',
+]);
+
+const normalizeMjmlHead = (editor: Parameters<Plugin<PluginOptions>>[0]) => {
+  const wrapper = editor.Components.getWrapper();
+  const mjml = wrapper?.components().find((component: any) => component.get('type') === 'mjml');
+
+  if (!mjml) {
+    return;
+  }
+
+  const components = mjml.components();
+  const head = components.find((component: any) => component.get('type') === 'mj-head');
+  const body = components.find((component: any) => component.get('type') === 'mj-body');
+
+  if (!head || !body) {
+    return;
+  }
+
+  const orphanHeadComponents = components.filter((component: any) => headComponentTypes.has(component.get('type')));
+
+  if (!orphanHeadComponents.length) {
+    return;
+  }
+
+  orphanHeadComponents.forEach((component: any) => {
+    component.remove({ temporary: true });
+    head.append(component, { at: head.components().length });
+  });
+
+  body.trigger('change:components');
+};
+
 export * from './types';
 
 export type RequiredPluginOptions = Required<PluginOptions>;
@@ -15,11 +55,13 @@ export type RequiredPluginOptions = Required<PluginOptions>;
 const plugin: Plugin<PluginOptions> = (editor, opt = {}) => {
   const opts: RequiredPluginOptions = {
     blocks: [
+      'mj-accordion',
       'mj-1-column',
       'mj-2-columns',
       'mj-3-columns',
       'mj-text',
       'mj-button',
+      'mj-carousel',
       'mj-image',
       'mj-divider',
       'mj-social-group',
@@ -28,6 +70,7 @@ const plugin: Plugin<PluginOptions> = (editor, opt = {}) => {
       'mj-navbar',
       'mj-navbar-link',
       'mj-hero',
+      'mj-table',
       'mj-wrapper',
       'mj-raw',
     ],
@@ -118,6 +161,10 @@ const plugin: Plugin<PluginOptions> = (editor, opt = {}) => {
   });
 
   [loadBlocks, loadComponents, loadCommands, loadPanels, loadStyle].forEach((module) => module(editor, opts));
+
+  editor.on('load', () => {
+    normalizeMjmlHead(editor);
+  });
 };
 
 export default plugin;

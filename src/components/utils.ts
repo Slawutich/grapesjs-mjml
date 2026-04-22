@@ -1,10 +1,10 @@
 import type { Editor } from 'grapesjs';
 import { MJMLParsingOptions } from "mjml-core";
-import { MjmlParser } from "./parser";
+import { MjmlParser, MjmlParserOutput } from "./parser";
 
 export const isComponentType = (type: string) => (el: Element) => (el.tagName || '').toLowerCase() === type;
 
-export function mjmlConvert (parser: MjmlParser, mjml: string, fonts: Record<string, string>, opts: Partial<MJMLParsingOptions> = {}) {
+export async function mjmlConvert (parser: MjmlParser, mjml: string, fonts: Record<string, string>, opts: Partial<MJMLParsingOptions> = {}): Promise<MjmlParserOutput> {
   const options: MJMLParsingOptions = {
     useMjmlConfigOptions: false,
     mjmlConfigPath: undefined,
@@ -18,7 +18,7 @@ export function mjmlConvert (parser: MjmlParser, mjml: string, fonts: Record<str
     options.fonts = fonts;
   }
 
-  return parser(mjml, options);
+  return await Promise.resolve(parser(mjml, options));
 }
 
 export const componentsToQuery = (cmps: string | string[]): string => {
@@ -31,7 +31,7 @@ export const getName = (editor: Editor, name: string): string => {
 };
 
 export function debounce<T extends (...params: any) => any>(clb: T, wait: number) {
-  let timeout: NodeJS.Timeout;
+  let timeout: number;
   return function(this: any, ...args: IArguments[]) {
     clearTimeout(timeout);
     timeout = setTimeout(() => {

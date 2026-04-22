@@ -28,16 +28,23 @@ const rawMjml = `
 describe('Line Height', () => {
   let editor: Editor;
 
-  beforeEach((done) => {
+  beforeEach(() => new Promise<void>((resolve, reject) => {
+    document.body.innerHTML = '<div id="gjs"></div>';
     const e = grapesjs.init({
       container: '#gjs',
+      headless: true,
+      storageManager: false,
       plugins: [grapesJSMJML],
     });
     editor = e;
 
-    editor.getModel().loadOnStart();
-    editor.on('change:readyLoad', () => done());
-  });
+    try {
+      editor.getModel().loadOnStart();
+      resolve();
+    } catch (err) {
+      reject(err);
+    }
+  }));
 
   afterEach(() => {
     editor.destroy();
@@ -47,7 +54,7 @@ describe('Line Height', () => {
     expect(editor).toBeTruthy();
   });
 
-  test('should expect default line height as 22px and export correctly in html', () => {
+  test('should expect default line height as 22px and export correctly in html', async () => {
     editor.addComponents(rawMjml);
 
     const mjmlComponent = editor.getComponents().at(0);
@@ -59,7 +66,7 @@ describe('Line Height', () => {
     const lineHeight = mjmlText.getAttributes()['line-height'];
     expect(lineHeight).toBe(undefined);
 
-    const { errors, html } = editor.Commands.run('mjml-code-to-html');
+    const { errors, html } = await editor.Commands.run('mjml-code-to-html');
 
     expect(errors).toHaveLength(0);
     expect(html).toMatchSnapshot();

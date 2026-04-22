@@ -31,8 +31,19 @@
 
 <body>
 
-  <div id="gjs" style="height:0px; overflow:hidden">
-    <mjml>
+  <div id="gjs" style="height:0px; overflow:hidden"></div>
+
+  <script type="text/javascript">
+    // Wait for the plugin to be injected by the dev server
+    window.onload = () => {
+      window.editor = grapesjs.init({
+        height: '100%',
+        noticeOnUnload: false,
+        storageManager: false,
+        container: '#gjs',
+        // MJML with <tr>/<td>/<th> must be passed as a string, not inline in the DOM.
+        // The browser's HTML parser strips table elements from inside custom elements like <mj-table>.
+        components: `<mjml>
       <mj-head>
         <mj-font name="Barlow" href="https://fonts.googleapis.com/css?family=Barlow"></mj-font>
 
@@ -102,24 +113,24 @@
         </mj-section>
         <mj-raw>
           <div class="container">
-            <img class="item" src="https://source.unsplash.com/random/200x141?random" alt="Example image">
-            <img class="item" src="https://source.unsplash.com/random/200x142?random" alt="Example image">
-            <img class="item" src="https://source.unsplash.com/random/200x143?random" alt="Example image">
-            <img class="item" src="https://source.unsplash.com/random/200x144?random" alt="Example image">
-            <img class="item" src="https://source.unsplash.com/random/200x145?random" alt="Example image">
-            <img class="item" src="https://source.unsplash.com/random/200x146?random" alt="Example image">
+            <img class="item" src="https://picsum.photos/200/141?random" alt="Example image">
+            <img class="item" src="https://picsum.photos/200/142?random" alt="Example image">
+            <img class="item" src="https://picsum.photos/200/143?random" alt="Example image">
+            <img class="item" src="https://picsum.photos/200/144?random" alt="Example image">
+            <img class="item" src="https://picsum.photos/200/145?random" alt="Example image">
+            <img class="item" src="https://picsum.photos/200/146?random" alt="Example image">
           </div>
         </mj-raw>
         <!-- Icons -->
         <mj-section background-color="#fbfbfb">
           <mj-column>
-            <mj-image width="100px" src="http://191n.mj.am/img/191n/3s/x0l.png" />
+            <mj-image width="100px" src="https://picsum.photos/100/101" />
           </mj-column>
           <mj-column>
-            <mj-image width="100px" src="http://191n.mj.am/img/191n/3s/x01.png" />
+            <mj-image width="100px" src="https://picsum.photos/100/102" />
           </mj-column>
           <mj-column>
-            <mj-image width="100px" src="http://191n.mj.am/img/191n/3s/x0s.png" />
+            <mj-image width="100px" src="https://picsum.photos/100/103" />
           </mj-column>
         </mj-section>
 
@@ -142,19 +153,7 @@
         </mj-section>
         <!-- Footer -->
       </mj-body>
-    </mjml>
-  </div>
-
-
-  <script type="text/javascript">
-    // Wait for the plugin to be injected by the dev server
-    window.onload = () => {
-      window.editor = grapesjs.init({
-        height: '100%',
-        noticeOnUnload: false,
-        storageManager: false,
-        fromElement: true,
-        container: '#gjs',
+    </mjml>`,
 
         plugins: ['grapesjs-mjml'],
         pluginsOpts: {

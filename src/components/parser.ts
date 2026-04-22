@@ -1,4 +1,3 @@
-// @ts-ignore
 import mjml2html from 'mjml-browser';
 import mjml from "mjml-core";
 
@@ -8,6 +7,9 @@ import mjml from "mjml-core";
  * @see {@link https://github.com/mjmlio/mjml/tree/master/packages/mjml-core}
  */
 export type MjmlParser = typeof mjml;
+
+export type MjmlParserResult = ReturnType<MjmlParser>;
+export type MjmlParserOutput = Awaited<MjmlParserResult>;
 
 /**
  * MJML Parser instance.

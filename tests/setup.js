@@ -1,5 +1,5 @@
-import "regenerator-runtime/runtime";
-import "whatwg-fetch";
+//import "regenerator-runtime/runtime";
+// import "whatwg-fetch";
 import _ from "underscore";
 
 const localStorage = {
@@ -19,3 +19,5 @@ global.__GJS_VERSION__ = "";
 global.grapesjs = require("grapesjs");
 global.$ = global.grapesjs.$;
 global.localStorage = localStorage;
+
+document.body.innerHTML = '<div id="gjs"></div>';

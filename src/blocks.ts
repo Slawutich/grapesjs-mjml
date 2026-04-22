@@ -32,6 +32,23 @@ export default (editor: Editor, opts: RequiredPluginOptions) => {
       </mj-section>`,
   });
 
+  addBlock('mj-accordion', {
+    label: 'Accordion',
+    media: `<svg viewBox="0 0 24 24">
+      <path fill="currentColor" d="M4 5H20V7H4V5M4 11H20V13H4V11M4 17H20V19H4V17M17.59 8.59L19 10L15 14L11 10L12.41 8.59L15 11.17L17.59 8.59Z" />
+    </svg>`,
+    content: `<mj-accordion>
+      <mj-accordion-element>
+        <mj-accordion-title>What is included?</mj-accordion-title>
+        <mj-accordion-text>Insurance, doorstep delivery, and a 7-day return window.</mj-accordion-text>
+      </mj-accordion-element>
+      <mj-accordion-element>
+        <mj-accordion-title>How fast can I test drive?</mj-accordion-title>
+        <mj-accordion-text>Most metro areas have same-week availability.</mj-accordion-text>
+      </mj-accordion-element>
+    </mj-accordion>`,
+  });
+
   addBlock('mj-2-columns', {
     label: getI18nLabel('twoColumn'),
     media: `<svg viewBox="0 0 23 24">
@@ -70,6 +87,18 @@ export default (editor: Editor, opts: RequiredPluginOptions) => {
         <path fill="currentColor" d="M20 20.5C20 21.3 19.3 22 18.5 22H13C12.6 22 12.3 21.9 12 21.6L8 17.4L8.7 16.6C8.9 16.4 9.2 16.3 9.5 16.3H9.7L12 18V9C12 8.4 12.4 8 13 8S14 8.4 14 9V13.5L15.2 13.6L19.1 15.8C19.6 16 20 16.6 20 17.1V20.5M20 2H4C2.9 2 2 2.9 2 4V12C2 13.1 2.9 14 4 14H8V12H4V4H20V12H18V14H20C21.1 14 22 13.1 22 12V4C22 2.9 21.1 2 20 2Z" />
     </svg>`,
     content: '<mj-button>Button</mj-button>',
+  });
+
+  addBlock('mj-carousel', {
+    label: 'Carousel',
+    media: `<svg viewBox="0 0 24 24">
+      <path fill="currentColor" d="M2 6A2 2 0 0 1 4 4H20A2 2 0 0 1 22 6V18A2 2 0 0 1 20 20H4A2 2 0 0 1 2 18V6M4 6V18H20V6H4M9 8L15 12L9 16V8Z" />
+    </svg>`,
+    content: `<mj-carousel>
+      <mj-carousel-image src="${imagePlaceholderSrc}" />
+      <mj-carousel-image src="https://via.placeholder.com/350x250/f4a261/ffffff" />
+      <mj-carousel-image src="https://via.placeholder.com/350x250/2a9d8f/ffffff" />
+    </mj-carousel>`,
   });
 
   addBlock('mj-image', {
@@ -147,6 +176,25 @@ export default (editor: Editor, opts: RequiredPluginOptions) => {
         ORDER YOUR TICKET NOW
       </mj-button>
     </mj-hero>`,
+  });
+
+  addBlock('mj-table', {
+    label: 'Table',
+    media: `<svg viewBox="0 0 24 24">
+      <path fill="currentColor" d="M3 3H21A1 1 0 0 1 22 4V20A1 1 0 0 1 21 21H3A1 1 0 0 1 2 20V4A1 1 0 0 1 3 3M4 5V9H10V5H4M12 5V9H20V5H12M4 11V19H10V11H4M12 11V19H20V11H12Z" />
+    </svg>`,
+    content: `<mj-table>
+      <tr style="border-bottom:1px solid #e2e8f0;text-align:left;">
+        <th style="padding:8px;">Model</th>
+        <th style="padding:8px;">Powertrain</th>
+        <th style="padding:8px;">Price</th>
+      </tr>
+      <tr>
+        <td style="padding:8px;">Tesla Model 3</td>
+        <td style="padding:8px;">Electric</td>
+        <td style="padding:8px;">$38,900</td>
+      </tr>
+    </mj-table>`,
   });
 
   addBlock('mj-wrapper', {

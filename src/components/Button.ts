@@ -68,8 +68,9 @@ export default (editor:  Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugi
       /**
        * Prevent content repeating
        */
-       rerender() {
+       async rerender() {
         this.render();
+        return await this.__renderPromise;
       },
     },
   });

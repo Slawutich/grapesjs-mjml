@@ -2,15 +2,28 @@ import type { Editor, ToHTMLOptions } from 'grapesjs';
 import { mjmlConvert, debounce, componentsToQuery } from './utils';
 import loadMjml from './mjml';
 import loadHead from './Head';
+import loadAttributes from './Attributes';
+import loadBreakpoint from './Breakpoint';
 import loadStyle from './Style';
 import loadFont from './Font';
+import loadHtmlAttributes from './HtmlAttributes';
+import loadHtmlAttribute from './HtmlAttribute';
+import loadPreview from './Preview';
+import loadSelector from './Selector';
+import loadTitle from './Title';
 import loadBody from './Body';
 import loadWrapper from './Wrapper';
 import loadSection from './Section';
 import loadGroup from './Group';
 import loadColumn from './Column';
+import loadAccordion from './Accordion';
+import loadAccordionElement from './AccordionElement';
+import loadAccordionTitle from './AccordionTitle';
+import loadAccordionText from './AccordionText';
 import loadText from './Text';
 import loadButton from './Button';
+import loadCarousel from './Carousel';
+import loadCarouselImage from './CarouselImage';
 import loadImage from './Image';
 import loadSocial from './Social';
 import loadSocialElement from './SocialElement';
@@ -20,6 +33,7 @@ import loadNavBar from './NavBar';
 import loadNavBarLink from './NavBarLink';
 import loadHero from './Hero';
 import loadRaw from './Raw';
+import loadTable from './Table';
 import { RequiredPluginOptions, PluginOptions } from '..';
 
 export type ComponentPluginOptions = {
@@ -165,10 +179,12 @@ export default (editor: Editor, opt: RequiredPluginOptions) => {
       this.stopListening(this.model, 'change:style');
       this.listenTo(this.model, 'change:attributes change:src', this.rerender);
       this.debouncedRender = debounce(this.render.bind(this), 0);
+      this.__renderId = 0;
     },
 
-    rerender() {
+    async rerender() {
       this.render(null, null, {}, 1);
+      return await this.__renderPromise;
     },
 
     /**
@@ -179,6 +195,48 @@ export default (editor: Editor, opt: RequiredPluginOptions) => {
         start: `<mjml>`,
         end: `</mjml>`,
       };
+    },
+
+    isInsideHead() {
+      let component = this.model;
+
+      while (component) {
+        if (component.get?.('type') === 'mj-head') {
+          return true;
+        }
+
+        component = component.parent?.();
+      }
+
+      return false;
+    },
+
+    getDocumentMjmlHead() {
+      if (this.isInsideHead()) {
+        return '';
+      }
+
+      const wrapper = editor.Components.getWrapper();
+      const mjml = wrapper?.components().find((component: any) => component.get('type') === 'mjml');
+      const head = mjml?.components().find((component: any) => component.get('type') === 'mj-head');
+
+      return head ? head.toHTML() : '';
+    },
+
+    injectDocumentHead(start: string) {
+      const head = this.getDocumentMjmlHead();
+
+      if (!head || /<mj-head[\s>]/.test(start)) {
+        return start;
+      }
+
+      const mjmlOpen = start.match(/^<mjml[^>]*>/);
+
+      if (!mjmlOpen) {
+        return start;
+      }
+
+      return `${mjmlOpen[0]}${head}${start.slice(mjmlOpen[0].length)}`;
     },
 
     /**
@@ -211,11 +269,12 @@ export default (editor: Editor, opt: RequiredPluginOptions) => {
     /**
      * Get HTML from MJML template.
      */
-    getTemplateFromMjml() {
+    async getTemplateFromMjml() {
       const mjmlTmpl = this.getMjmlTemplate();
       const innerMjml = this.getInnerMjmlTemplate();
-      const mjml = `${mjmlTmpl.start}${innerMjml.start}${innerMjml.end}${mjmlTmpl.end}`;
-      const htmlOutput = mjmlConvert(opt.mjmlParser, mjml, opt.fonts);
+      const mjmlStart = this.injectDocumentHead(mjmlTmpl.start);
+      const mjml = `${mjmlStart}${innerMjml.start}${innerMjml.end}${mjmlTmpl.end}`;
+      const htmlOutput = await mjmlConvert(opt.mjmlParser, mjml, opt.fonts);
       let html = htmlOutput.html;
       html = html.replace(/<body(.*)>/, '<body>');
       let start = html.indexOf('<body>') + 6;
@@ -268,12 +327,27 @@ export default (editor: Editor, opt: RequiredPluginOptions) => {
     },
 
     render(p: any, c: any, opts: any, appendChildren: boolean) {
+      const renderId = (this.__renderId || 0) + 1;
+      this.__renderId = renderId;
       this.renderAttributes();
-      this.el.innerHTML = this.getTemplateFromMjml();
-      this.renderChildren(appendChildren);
-      this.childNodes = this.getChildrenContainer().childNodes;
-      this.renderStyle();
-      this.postRender();
+      this.__renderPromise = Promise.resolve(this.getTemplateFromMjml())
+        .then((template: string) => {
+          if (this.__renderId !== renderId) {
+            return this;
+          }
+
+          this.el.innerHTML = template;
+          this.renderChildren(appendChildren);
+          this.childNodes = this.getChildrenContainer().childNodes;
+          this.renderStyle();
+          this.postRender();
+
+          return this;
+        })
+        .catch((error: Error) => {
+          editor.log(error.message, { level: 'error' });
+          return this;
+        });
 
       return this;
     },
@@ -297,15 +371,28 @@ export default (editor: Editor, opt: RequiredPluginOptions) => {
   [
     loadMjml,
     loadHead,
+    loadAttributes,
+    loadBreakpoint,
     loadStyle,
     loadFont,
+    loadHtmlAttributes,
+    loadHtmlAttribute,
+    loadPreview,
+    loadSelector,
+    loadTitle,
     loadBody,
     loadWrapper,
     loadSection,
     loadGroup,
     loadColumn,
+    loadAccordion,
+    loadAccordionElement,
+    loadAccordionTitle,
+    loadAccordionText,
     loadButton,
     loadText,
+    loadCarousel,
+    loadCarouselImage,
     loadImage,
     loadSocial,
     loadSocialElement,
@@ -315,6 +402,7 @@ export default (editor: Editor, opt: RequiredPluginOptions) => {
     loadNavBarLink,
     loadHero,
     loadRaw,
+    loadTable,
     ...opt.customComponents,
   ].forEach((module) => module(editor, compOpts));
 };

@@ -53,16 +53,23 @@ const expectedBlocks = [
 describe("mjml tests", () => {
   let editor: Editor;
 
-  beforeEach((done) => {
+  beforeEach(() => new Promise<void>((resolve, reject) => {
+    document.body.innerHTML = '<div id="gjs"></div>';
     const e = grapesjs.init({
       container: "#gjs",
+      headless: true,
+      storageManager: false,
       plugins: [grapesJSMJML],
     });
     editor = e;
 
-    editor.getModel().loadOnStart();
-    editor.on("change:readyLoad", () => done());
-  });
+    try {
+      editor.getModel().loadOnStart();
+      resolve();
+    } catch (err) {
+      reject(err);
+    }
+  }));
 
   afterEach(() => {
     editor.destroy();
@@ -72,16 +79,16 @@ describe("mjml tests", () => {
     expect(editor).toBeTruthy();
   });
 
-  test.each(expectedBlocks)("Has block %s", (block) => {
+  test.each(expectedBlocks)("Has block %s", (block: string) => {
     const blocks = editor.BlockManager.getAll()!;
     const blockExists = blocks.find((b) => b.id === block);
     expect(blockExists).toBeTruthy();
   });
 
-  test("should create basic structure and snapshot result", () => {
+  test("should create basic structure and snapshot result", async () => {
     editor.addComponents(rawMjml);
 
-    const { errors, html } = editor.Commands.run("mjml-code-to-html");
+    const { errors, html } = await editor.Commands.run("mjml-code-to-html");
 
     expect(errors).toHaveLength(0);
 

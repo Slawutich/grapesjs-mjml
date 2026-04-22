@@ -46,7 +46,7 @@ export default (editor: Editor, opts: RequiredPluginOptions, cmdId: string) => {
       return containerEl;
     },
 
-    run(editor, sender) {
+    async run(editor, sender) {
       const container = this.getCodeContainer();
       let codeEditorMjml = this.codeEditorMjml;
       let codeEditorHtml = this.codeEditorHtml;
@@ -81,7 +81,7 @@ export default (editor: Editor, opts: RequiredPluginOptions, cmdId: string) => {
       }
 
       if (codeEditorHtml) {
-        const mjmlResult = Commands.run(cmdGetMjmlToHtml);
+        const mjmlResult = await Commands.run(cmdGetMjmlToHtml);
         mjmlResult.errors?.forEach((error: any) => {
           editor.log(error.formattedMessage, {
             ns: cmdGetMjmlToHtml,
