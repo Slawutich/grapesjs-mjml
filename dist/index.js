@@ -368,7 +368,7 @@ function expandShorthand(attrs) {
 function splitValues(value) {
     return value.trim().split(/\s+/);
 }
-function expand4Sides(prefix, value, sides) {
+function expand4Sides(value, sides) {
     const parts = splitValues(value);
     const [top, right, bottom, left] = sides;
     switch (parts.length) {
@@ -386,17 +386,12 @@ function expand4Sides(prefix, value, sides) {
 function expandProperty(prop, value) {
     switch (prop) {
         case 'padding':
-            return expand4Sides('padding', value, [
+            return expand4Sides(value, [
                 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
             ]);
         case 'margin':
-            return expand4Sides('margin', value, [
+            return expand4Sides(value, [
                 'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
-            ]);
-        case 'border-radius':
-            return expand4Sides('border-radius', value, [
-                'border-top-left-radius', 'border-top-right-radius',
-                'border-bottom-right-radius', 'border-bottom-left-radius',
             ]);
         case 'border':
         case 'border-top':
@@ -1167,7 +1162,7 @@ const Image_type = 'mj-image';
                     'padding-left': '25px',
                     align: 'center',
                 },
-                traits: ['href', 'rel', 'alt', 'title'],
+                traits: ['src', 'rel', 'alt', 'title'],
                 void: false,
             },
             getStylesToAttributes() {

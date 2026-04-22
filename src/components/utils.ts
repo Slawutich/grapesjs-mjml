@@ -66,7 +66,6 @@ function splitValues(value: string): string[] {
 }
 
 function expand4Sides(
-  prefix: string,
   value: string,
   sides: [string, string, string, string],
 ): Record<string, string> {
@@ -88,17 +87,12 @@ function expand4Sides(
 function expandProperty(prop: string, value: string): Record<string, string> | null {
   switch (prop) {
     case 'padding':
-      return expand4Sides('padding', value, [
+      return expand4Sides(value, [
         'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
       ]);
     case 'margin':
-      return expand4Sides('margin', value, [
+      return expand4Sides(value, [
         'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
-      ]);
-    case 'border-radius':
-      return expand4Sides('border-radius', value, [
-        'border-top-left-radius', 'border-top-right-radius',
-        'border-bottom-right-radius', 'border-bottom-left-radius',
       ]);
     case 'border':
     case 'border-top':

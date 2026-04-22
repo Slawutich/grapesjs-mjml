@@ -59,26 +59,6 @@ describe('expandShorthand', () => {
     });
   });
 
-  describe('border-radius', () => {
-    it('expands single value', () => {
-      expect(expandShorthand({ 'border-radius': '8px' })).toEqual({
-        'border-top-left-radius': '8px',
-        'border-top-right-radius': '8px',
-        'border-bottom-right-radius': '8px',
-        'border-bottom-left-radius': '8px',
-      });
-    });
-
-    it('expands four values', () => {
-      expect(expandShorthand({ 'border-radius': '1px 2px 3px 4px' })).toEqual({
-        'border-top-left-radius': '1px',
-        'border-top-right-radius': '2px',
-        'border-bottom-right-radius': '3px',
-        'border-bottom-left-radius': '4px',
-      });
-    });
-  });
-
   describe('border', () => {
     it('expands border shorthand', () => {
       expect(expandShorthand({ border: '1px solid red' })).toEqual({
