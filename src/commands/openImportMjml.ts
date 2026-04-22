@@ -1,5 +1,5 @@
 import type { Editor } from 'grapesjs';
-import { RequiredPluginOptions } from '..';
+import { RequiredPluginOptions, normalizeMjmlHead, applyMjAttributes } from '..';
 
 export default (editor: Editor, opts: RequiredPluginOptions, cmdId: string) => {
   const config = editor.getConfig();

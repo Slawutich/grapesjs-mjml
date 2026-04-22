@@ -56,11 +56,49 @@ export default (editor: Editor, opt: RequiredPluginOptions) => {
   const ComponentsView = Components.ComponentsView;
   const sandboxEl = document.createElement('div');
 
+  /**
+   * Read mj-attributes from mj-head and return merged defaults
+   * for the given component type. Returns {} if the tree is not ready.
+   */
+  function getMjAttributeDefaults(componentType: string): Record<string, string> {
+    const wrapper = editor.Components.getWrapper();
+    const mjml = wrapper?.components().find((c: any) => c.get('type') === 'mjml');
+    if (!mjml) return {};
+
+    const head = mjml.components().find((c: any) => c.get('type') === 'mj-head');
+    if (!head) return {};
+
+    const attrsComp = head.components().find((c: any) => c.get('type') === 'mj-attributes');
+    if (!attrsComp) return {};
+
+    const result: Record<string, string> = {};
+
+    attrsComp.components().forEach((child: any) => {
+      const childTag = child.get('tagName');
+      if (childTag !== 'mj-all' && childTag !== componentType) return;
+
+      // Read raw attributes directly to avoid recursion with getAttrToHTML()
+      const attrs: Record<string, string> = { ...child.get('attributes') };
+      delete attrs.style;
+      delete attrs.id;
+
+      // mj-all comes first, type-specific overrides it
+      Object.assign(result, attrs);
+    });
+
+    return result;
+  }
+
+  // Expose for use in applyMjAttributes (src/index.ts)
+  (editor as any).__getMjAttributeDefaults = getMjAttributeDefaults;
+
   // MJML Core model
   let coreMjmlModel = {
     init() {
       const attrs = { ...this.get('attributes') };
-      const style = { ...this.get('style-default'), ...this.get('style') };
+      const tagName = this.get('tagName');
+      const headDefaults = getMjAttributeDefaults(tagName);
+      const style = { ...this.get('style-default'), ...headDefaults, ...this.get('style') };
 
       for (let prop in style) {
         if (!(prop in attrs)) {
@@ -97,7 +135,8 @@ export default (editor: Editor, opt: RequiredPluginOptions) => {
     },
 
     /**
-     * This will avoid rendering default attributes
+     * This will avoid rendering default attributes and
+     * attributes already defined in mj-attributes (mj-head)
      * @return {Object}
      */
     getAttrToHTML() {
@@ -106,10 +145,23 @@ export default (editor: Editor, opt: RequiredPluginOptions) => {
       delete attr.style;
       delete attr.id;
 
+      // Only strip head defaults for body components, not for
+      // components inside mj-attributes (which define the defaults themselves)
+      let isInsideHead = false;
+      let parent = this.parent?.();
+      while (parent) {
+        if (parent.get?.('type') === 'mj-head') {
+          isInsideHead = true;
+          break;
+        }
+        parent = parent.parent?.();
+      }
+      const headDefaults = isInsideHead ? {} : getMjAttributeDefaults(this.get('tagName'));
+
       for (let prop in attr) {
         const value = attr[prop];
 
-        if (value && value === style[prop]) {
+        if (value && (value === style[prop] || value === headDefaults[prop])) {
           delete attr[prop];
         }
       }
