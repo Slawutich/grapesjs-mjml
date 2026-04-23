@@ -34,8 +34,6 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
           'border', 'border-width', 'border-style', 'border-color'
         ],
         traits:[
-          'id',
-          'title',
           {
             type: 'checkbox',
             label: 'Full width',

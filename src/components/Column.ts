@@ -38,6 +38,7 @@ export default (editor: Editor, { opt, coreMjmlModel, coreMjmlView, sandboxEl }:
         'style-default': {
           'vertical-align': 'top',
         },
+        traits: []
       },
     },
 

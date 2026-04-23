@@ -20,6 +20,7 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
         'style-default': {
           display: 'none',
         },
+        traits: [],
       },
     },
     view: {

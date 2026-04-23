@@ -31,6 +31,7 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
           'width', 'container-background-color',
           'border-detached', 'border-width', 'border-style', 'border-color'
         ],
+        traits: [],
         void: false,
       },
     },

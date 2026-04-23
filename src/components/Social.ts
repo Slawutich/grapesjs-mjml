@@ -32,6 +32,7 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
           'line-height': '22px',
         },
         traits: [
+          // @TODO doesn't work
           {
             type: 'select',
             label: 'Mode',

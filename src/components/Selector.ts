@@ -16,6 +16,7 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
         droppable: componentsToQuery(typeHtmlAttribute),
         highlightable: false,
         stylable: false,
+        traits: [],
       },
     },
     view: {

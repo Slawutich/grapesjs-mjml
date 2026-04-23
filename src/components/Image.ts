@@ -46,7 +46,18 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
           'padding-left': '25px',
           align: 'center',
         },
-        traits: ['src', 'rel', 'alt', 'title'],
+        traits: [
+          'src', 'alt', 'title', // image
+          'href', 'rel',  // link
+          // @TODO doesn't work
+          {
+            type: 'checkbox',
+            label: 'Fluid on mobile',
+            name: 'fluid-on-mobile',
+            valueTrue: 'true',
+            valueFalse: '',
+          }
+        ],
         void: false,
       },
 

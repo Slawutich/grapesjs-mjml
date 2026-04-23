@@ -18,6 +18,7 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
         draggable: () => componentsToQuery(type),
         droppable: () => componentsToQuery([typeCell, typeHeaderCell]),
         highlightable: false,
+        traits: [],
       },
     },
     view: {
@@ -36,6 +37,7 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
         name: 'Table cell',
         draggable: () => componentsToQuery(typeRow),
         highlightable: false,
+        traits: [],
       },
     },
     view: {
@@ -54,6 +56,7 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
         name: 'Table header',
         draggable: () => componentsToQuery(typeRow),
         highlightable: false,
+        traits: [],
       },
     },
     view: {
@@ -81,6 +84,7 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
         draggable: componentsToQuery(typeColumn),
         droppable: componentsToQuery(typeRow),
         highlightable: false,
+        traits: [],
         stylable: [
           'align',
           'color',

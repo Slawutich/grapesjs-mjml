@@ -624,11 +624,12 @@ const cmdGetMjmlToHtml = 'mjml-code-to-html';
 ;// ./src/components/Head.ts
 
 const type = 'mj-head';
-/* harmony default export */ const Head = ((editor) => {
+/* harmony default export */ const Head = ((editor, _options) => {
     editor.Components.addType(type, {
         isComponent: isComponentType(type),
         model: {
             defaults: {
+                name: 'Head',
                 draggable: false,
                 droppable: componentsToQuery([
                     'mj-preview',
@@ -640,6 +641,12 @@ const type = 'mj-head';
                     'mj-title',
                     'mj-raw'
                 ]),
+                stylable: false,
+                copyable: false,
+                removable: false,
+                highlightable: false,
+                layerable: false,
+                traits: [],
             },
         },
     });
@@ -660,9 +667,20 @@ const Wrapper_type = 'mj-wrapper';
                 name: getName(editor, 'wrapper'),
                 draggable: componentsToQuery(Body_type),
                 droppable: componentsToQuery(Section_type),
+                stylable: [
+                    'background-color', 'background-position', 'background-repeat', 'background-url', 'background-size',
+                    'padding', 'padding-top', 'padding-left', 'padding-right', 'padding-bottom', 'text-align',
+                    'border-radius',
+                    'border-top-left-radius',
+                    'border-top-right-radius',
+                    'border-bottom-left-radius',
+                    'border-bottom-right-radius',
+                    'border',
+                    'border-width',
+                    'border-style',
+                    'border-color',
+                ],
                 traits: [
-                    'id',
-                    'title',
                     {
                         type: 'checkbox',
                         label: 'Full width',
@@ -723,7 +741,8 @@ const Group_type = 'mj-group';
                 ],
                 'style-default': {
                     'vertical-align': 'top'
-                }
+                },
+                traits: [],
             },
         },
         view: {
@@ -777,8 +796,6 @@ const Section_type = 'mj-section';
                     'border', 'border-width', 'border-style', 'border-color'
                 ],
                 traits: [
-                    'id',
-                    'title',
                     {
                         type: 'checkbox',
                         label: 'Full width',
@@ -866,6 +883,7 @@ const Column_type = 'mj-column';
                 'style-default': {
                     'vertical-align': 'top',
                 },
+                traits: []
             },
         },
         view: {
@@ -1010,6 +1028,7 @@ const Text_type = 'mj-text';
                     'font-size': '13px',
                     align: 'left',
                 },
+                traits: []
             },
         },
         view: {
@@ -1084,7 +1103,7 @@ const Button_type = 'mj-button';
                     'padding-left': '25px',
                     'align': 'center',
                 },
-                traits: ['href'],
+                traits: ['href', 'title', 'rel'],
                 // 'container-background-color', 'inner-padding'
             },
         },
@@ -1162,7 +1181,18 @@ const Image_type = 'mj-image';
                     'padding-left': '25px',
                     align: 'center',
                 },
-                traits: ['src', 'rel', 'alt', 'title'],
+                traits: [
+                    'src', 'alt', 'title', // image
+                    'href', 'rel', // link
+                    // @TODO doesn't work
+                    {
+                        type: 'checkbox',
+                        label: 'Fluid on mobile',
+                        name: 'fluid-on-mobile',
+                        valueTrue: 'true',
+                        valueFalse: '',
+                    }
+                ],
                 void: false,
             },
             getStylesToAttributes() {
@@ -1226,6 +1256,7 @@ const Divider_type = 'mj-divider';
                     'width', 'container-background-color',
                     'border-detached', 'border-width', 'border-style', 'border-color'
                 ],
+                traits: [],
                 void: false,
             },
         },
@@ -1268,7 +1299,7 @@ const NavBarLink_type = 'mj-navbar-link';
                 highlightable: false,
                 stylable: [
                     'font-style', 'font-size', 'font-weight', 'font-family', 'color',
-                    'text-decoration', 'text-transform',
+                    'line-height', 'letter-spacing', 'text-decoration', 'text-transform',
                     'padding', 'padding-top', 'padding-left', 'padding-right', 'padding-bottom',
                 ],
                 'style-default': {
@@ -1279,7 +1310,7 @@ const NavBarLink_type = 'mj-navbar-link';
                     'padding-right': '10px',
                     'text-transform': 'uppercase',
                 },
-                traits: ['href'],
+                traits: ['href', 'rel'],
             },
         },
         view: {
@@ -1339,12 +1370,15 @@ const NavBar_type = 'mj-navbar';
                 draggable: componentsToQuery([Column_type, Hero_type]),
                 droppable: componentsToQuery(NavBarLink_type),
                 'style-default': {
-                // TODO
+                    align: 'center',
                 },
                 stylable: [
-                // TODO
+                    'align',
+                    'padding', 'padding-top', 'padding-left', 'padding-right', 'padding-bottom',
+                    //@TODO ico-*
                 ],
                 traits: [
+                    'base-url',
                     {
                         type: 'select',
                         label: 'Hamburger',
@@ -1500,8 +1534,8 @@ const SocialElement_type = 'mj-social-element';
                             { value: 'xing', name: 'Xing' },
                         ]
                     },
-                    { name: 'src' },
-                    { name: 'href' },
+                    'src', 'alt', 'title', // image
+                    'href', 'rel' // link
                 ],
             },
         },
@@ -1568,6 +1602,7 @@ const Social_type = 'mj-social';
                     'line-height': '22px',
                 },
                 traits: [
+                    // @TODO doesn't work
                     {
                         type: 'select',
                         label: 'Mode',
@@ -1632,6 +1667,7 @@ const Spacer_type = 'mj-spacer';
                 droppable: false,
                 'style-default': { height: '20px' },
                 stylable: ['height', 'container-background-color'],
+                traits: [],
                 void: false,
             },
         },
@@ -1680,12 +1716,24 @@ const Hero_type = 'mj-hero';
                 droppable: componentsToQuery([Text_type, Button_type, Image_type, Divider_type, NavBar_type, Social_type, Spacer_type]),
                 stylable: [
                     'background-color', 'background-height', 'background-position', 'background-url',
-                    'background-width', 'css-class', 'height', 'mode', 'padding', 'padding-top',
+                    'background-width', 'height', 'padding', 'padding-top',
                     'padding-left', 'padding-right', 'padding-bottom', 'vertical-align', 'width'
                 ],
                 'style-default': {
                     'vertical-align': 'top'
-                }
+                },
+                traits: [
+                    //@TODO doesn't work
+                    {
+                        type: 'select',
+                        label: 'Mode',
+                        name: 'mode',
+                        options: [
+                            { value: 'fixed-height', name: 'Fixed height' },
+                            { value: 'fluid-height', name: 'Fluid height' },
+                        ]
+                    }
+                ],
             },
         },
         view: {
@@ -1724,7 +1772,8 @@ const Raw_type = 'mj-raw';
                 stylable: false,
                 'style-default': {},
                 'style': {},
-                'attributes': {}
+                'attributes': {},
+                traits: [],
             },
         },
         view: {
@@ -1796,6 +1845,7 @@ const Body_type = 'mj-body';
                 highlightable: false,
                 'style-default': { 'width': '600px' },
                 stylable: ['width', 'background-color'],
+                traits: [],
             },
         },
         view: {
@@ -1900,6 +1950,7 @@ const Attributes_type = 'mj-attributes';
                 'style-default': {
                     display: 'none',
                 },
+                traits: [],
             },
         },
         view: {
@@ -2087,6 +2138,7 @@ const Selector_type = 'mj-selector';
                 droppable: componentsToQuery(HtmlAttribute_type),
                 highlightable: false,
                 stylable: false,
+                traits: [],
             },
         },
         view: {
@@ -2118,6 +2170,7 @@ const HtmlAttributes_type = 'mj-html-attributes';
                 droppable: componentsToQuery(Selector_type),
                 highlightable: false,
                 stylable: false,
+                traits: [],
             },
         },
         view: {
@@ -2484,6 +2537,7 @@ const typeHeaderCell = 'th';
                 draggable: () => componentsToQuery(Table_type),
                 droppable: () => componentsToQuery([typeCell, typeHeaderCell]),
                 highlightable: false,
+                traits: [],
             },
         },
         view: {
@@ -2501,6 +2555,7 @@ const typeHeaderCell = 'th';
                 name: 'Table cell',
                 draggable: () => componentsToQuery(typeRow),
                 highlightable: false,
+                traits: [],
             },
         },
         view: {
@@ -2518,6 +2573,7 @@ const typeHeaderCell = 'th';
                 name: 'Table header',
                 draggable: () => componentsToQuery(typeRow),
                 highlightable: false,
+                traits: [],
             },
         },
         view: {
@@ -2543,6 +2599,7 @@ const typeHeaderCell = 'th';
                 draggable: componentsToQuery(Column_type),
                 droppable: componentsToQuery(typeRow),
                 highlightable: false,
+                traits: [],
                 stylable: [
                     'align',
                     'color',

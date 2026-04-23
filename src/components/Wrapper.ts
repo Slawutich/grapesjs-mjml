@@ -17,9 +17,20 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
         name: getName(editor, 'wrapper'),
         draggable: componentsToQuery(typeBody),
         droppable: componentsToQuery(typeSection),
+        stylable: [
+          'background-color', 'background-position', 'background-repeat', 'background-url', 'background-size', 
+          'padding', 'padding-top', 'padding-left', 'padding-right', 'padding-bottom', 'text-align',
+          'border-radius',
+          'border-top-left-radius',
+          'border-top-right-radius',
+          'border-bottom-left-radius',
+          'border-bottom-right-radius',
+          'border',
+          'border-width',
+          'border-style',
+          'border-color',
+        ],
         traits:[
-          'id',
-          'title',
           {
             type: 'checkbox',
             label: 'Full width',

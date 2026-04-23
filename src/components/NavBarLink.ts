@@ -18,7 +18,7 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
         highlightable: false,
         stylable: [
           'font-style', 'font-size', 'font-weight', 'font-family', 'color',
-          'text-decoration', 'text-transform',
+          'line-height', 'letter-spacing', 'text-decoration', 'text-transform',
           'padding', 'padding-top', 'padding-left', 'padding-right', 'padding-bottom',
         ],
         'style-default': {
@@ -29,7 +29,7 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
           'padding-right': '10px',
           'text-transform': 'uppercase',
         },
-        traits: ['href'],
+        traits: ['href', 'rel'],
       },
     },
 

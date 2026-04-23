@@ -46,6 +46,7 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
           'font-size': '13px',
           align: 'left',
         },
+        traits: []
       },
     },
 

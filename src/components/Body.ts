@@ -23,6 +23,7 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
         highlightable: false,
         'style-default': { 'width': '600px' },
         stylable: [ 'width', 'background-color' ],
+        traits: [],
       },
     },
 
