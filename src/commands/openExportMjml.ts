@@ -72,8 +72,8 @@ export default (editor: Editor, opts: RequiredPluginOptions, cmdId: string) => {
         })
         .onceClose(() => {
           sender.set && sender.set('active', false);
-          editor.stopCommand(cmdId)
-        })
+          editor.stopCommand(cmdId);
+        });
 
       if (codeEditorMjml) {
         codeEditorMjml.setContent(Commands.run(cmdGetMjml));

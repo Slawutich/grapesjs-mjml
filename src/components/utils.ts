@@ -72,43 +72,43 @@ function expand4Sides(
   const parts = splitValues(value);
   const [top, right, bottom, left] = sides;
   switch (parts.length) {
-    case 1:
-      return { [top]: parts[0], [right]: parts[0], [bottom]: parts[0], [left]: parts[0] };
-    case 2:
-      return { [top]: parts[0], [right]: parts[1], [bottom]: parts[0], [left]: parts[1] };
-    case 3:
-      return { [top]: parts[0], [right]: parts[1], [bottom]: parts[2], [left]: parts[1] };
-    case 4:
-    default:
-      return { [top]: parts[0], [right]: parts[1], [bottom]: parts[2], [left]: parts[3] };
+  case 1:
+    return { [top]: parts[0], [right]: parts[0], [bottom]: parts[0], [left]: parts[0] };
+  case 2:
+    return { [top]: parts[0], [right]: parts[1], [bottom]: parts[0], [left]: parts[1] };
+  case 3:
+    return { [top]: parts[0], [right]: parts[1], [bottom]: parts[2], [left]: parts[1] };
+  case 4:
+  default:
+    return { [top]: parts[0], [right]: parts[1], [bottom]: parts[2], [left]: parts[3] };
   }
 }
 
 function expandProperty(prop: string, value: string): Record<string, string> | null {
   switch (prop) {
-    case 'padding':
-      return expand4Sides(value, [
-        'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
-      ]);
-    case 'margin':
-      return expand4Sides(value, [
-        'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
-      ]);
-    case 'border':
-    case 'border-top':
-    case 'border-right':
-    case 'border-bottom':
-    case 'border-left': {
-      const parts = splitValues(value);
-      const prefix = prop === 'border' ? 'border' : prop;
-      const res: Record<string, string> = {};
-      // CSS border shorthand: <width> <style> <color>
-      if (parts[0]) res[`${prefix}-width`] = parts[0];
-      if (parts[1]) res[`${prefix}-style`] = parts[1];
-      if (parts[2]) res[`${prefix}-color`] = parts.slice(2).join(' ');
-      return Object.keys(res).length ? res : null;
-    }
-    default:
-      return null;
+  case 'padding':
+    return expand4Sides(value, [
+      'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
+    ]);
+  case 'margin':
+    return expand4Sides(value, [
+      'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
+    ]);
+  case 'border':
+  case 'border-top':
+  case 'border-right':
+  case 'border-bottom':
+  case 'border-left': {
+    const parts = splitValues(value);
+    const prefix = prop === 'border' ? 'border' : prop;
+    const res: Record<string, string> = {};
+    // CSS border shorthand: <width> <style> <color>
+    if (parts[0]) res[`${prefix}-width`] = parts[0];
+    if (parts[1]) res[`${prefix}-style`] = parts[1];
+    if (parts[2]) res[`${prefix}-color`] = parts.slice(2).join(' ');
+    return Object.keys(res).length ? res : null;
+  }
+  default:
+    return null;
   }
 };

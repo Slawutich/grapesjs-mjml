@@ -40,7 +40,7 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
             name: 'full-width',
             valueTrue: 'full-width',
             valueFalse: '',
-         }
+          }
         ],
       },
     },

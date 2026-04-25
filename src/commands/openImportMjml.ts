@@ -85,7 +85,7 @@ export default (editor: Editor, opts: RequiredPluginOptions, cmdId: string) => {
         content: container
       }).onceClose(() => {
         sender.set && sender.set('active', false);
-        editor.stopCommand(cmdId)
+        editor.stopCommand(cmdId);
       });
     },
 
