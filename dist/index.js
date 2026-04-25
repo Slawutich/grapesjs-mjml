@@ -101,7 +101,7 @@ __webpack_require__.d(__webpack_exports__, {
 ;// ./src/blocks.ts
 /* harmony default export */ const blocks = ((editor, opts) => {
     const { Blocks } = editor;
-    const imagePlaceholderSrc = opts.imagePlaceholderSrc || 'https://via.placeholder.com/350x250/78c5d6/fff';
+    const imagePlaceholderSrc = opts.imagePlaceholderSrc || 'https://picsum.photos/350/250';
     const socialIcon = `<svg viewBox="0 0 24 24">
     <path fill="currentColor" d="M18,16.08C17.24,16.08 16.56,16.38 16.04,16.85L8.91,12.7C8.96,12.47 9,12.24 9,12C9,11.76 8.96,11.53 8.91,11.3L15.96,7.19C16.5,7.69 17.21,8 18,8A3,3 0 0,0 21,5A3,3 0 0,0 18,2A3,3 0 0,0 15,5C15,5.24 15.04,5.47 15.09,5.7L8.04,9.81C7.5,9.31 6.79,9 6,9A3,3 0 0,0 3,12A3,3 0 0,0 6,15C6.79,15 7.5,14.69 8.04,14.19L15.16,18.34C15.11,18.55 15.08,18.77 15.08,19C15.08,20.61 16.39,21.91 18,21.91C19.61,21.91 20.92,20.61 20.92,19A2.92,2.92 0 0,0 18,16.08Z" />
   </svg>`;
@@ -301,13 +301,13 @@ __webpack_require__.d(__webpack_exports__, {
         <path fill="currentColor" d="M12,17.56L16.07,16.43L16.62,10.33H9.38L9.2,8.3H16.8L17,6.31H7L7.56,12.32H14.45L14.22,14.9L12,15.5L9.78,14.9L9.64,13.24H7.64L7.93,16.43L12,17.56M4.07,3H19.93L18.5,19.2L12,21L5.5,19.2L4.07,3Z" />
     </svg>`,
         content: `<mj-raw>
-      <div class="container">
-        <img class="item" src="https://source.unsplash.com/random/200x141" alt="Example image">
-        <img class="item" src="https://source.unsplash.com/random/200x142" alt="Example image">
-        <img class="item" src="https://source.unsplash.com/random/200x143" alt="Example image">
-        <img class="item" src="https://source.unsplash.com/random/200x144" alt="Example image">
-        <img class="item" src="https://source.unsplash.com/random/200x145" alt="Example image">
-        <img class="item" src="https://source.unsplash.com/random/200x146" alt="Example image">
+      <div style="display: flex;justify-content: center;">
+        <img class="item" src="https://picsum.photos/200/141" alt="Example image">
+        <img class="item" src="https://picsum.photos/200/142" alt="Example image">
+        <img class="item" src="https://picsum.photos/200/143" alt="Example image">
+        <img class="item" src="https://picsum.photos/200/144" alt="Example image">
+        <img class="item" src="https://picsum.photos/200/145" alt="Example image">
+        <img class="item" src="https://picsum.photos/200/146" alt="Example image">
       </div>
     </mj-raw>`,
     });
