@@ -19,7 +19,6 @@ export default (editor: Editor, opts: RequiredPluginOptions) => {
     });
   };
 
-  // @ts-ignore
   const getI18nLabel = (label: string) => editor.I18n.t(`grapesjs-mjml.components.names.${label}`);
 
   addBlock('mj-1-column', {
@@ -172,7 +171,7 @@ export default (editor: Editor, opts: RequiredPluginOptions) => {
       <mj-text padding="20px" color="#ffffff" font-family="Helvetica" align="center" font-size="45px" line-height="45px" font-weight="900">
         GO TO SPACE
       </mj-text>
-      <mj-button href="https://mjml.io/" align="center">
+      <mj-button align="center">
         ORDER YOUR TICKET NOW
       </mj-button>
     </mj-hero>`,
@@ -202,16 +201,16 @@ export default (editor: Editor, opts: RequiredPluginOptions) => {
     media: `<svg viewBox="0 0 24 24">
         <path fill="currentColor" d="M18 2H6C4.89 2 4 2.9 4 4V20C4 21.11 4.89 22 6 22H18C19.11 22 20 21.11 20 20V4C20 2.9 19.11 2 18 2M18 20H6V16H18V20M18 8H6V4H18V8Z" />
     </svg>`,
-    content: `<mj-wrapper border="1px solid #000000" padding="50px 30px">
-      <mj-section border-top="1px solid #aaaaaa" border-left="1px solid #aaaaaa" border-right="1px solid #aaaaaa" padding="20px">
+    content: `<mj-wrapper>
+      <mj-section padding="20px">
         <mj-column>
           <mj-image padding="0" src="${imagePlaceholderSrc}" />
         </mj-column>
       </mj-section>
-      <mj-section border-left="1px solid #aaaaaa" border-right="1px solid #aaaaaa" padding="20px" border-bottom="1px solid #aaaaaa">
+      <mj-section padding="20px">
         <mj-column border="1px solid #dddddd">
           <mj-text padding="20px"> First line of text </mj-text>
-          <mj-divider border-width="1px" border-style="dashed" border-color="lightgrey" padding="0 20px" />
+          <mj-divider border-width="1px" border-style="dashed" border-color="lightgrey" padding="0 20px"></mj-divider>
           <mj-text padding="20px"> Second line of text </mj-text>
         </mj-column>
       </mj-section>
@@ -227,10 +226,6 @@ export default (editor: Editor, opts: RequiredPluginOptions) => {
       <div style="display: flex;justify-content: center;">
         <img class="item" src="https://picsum.photos/200/141" alt="Example image">
         <img class="item" src="https://picsum.photos/200/142" alt="Example image">
-        <img class="item" src="https://picsum.photos/200/143" alt="Example image">
-        <img class="item" src="https://picsum.photos/200/144" alt="Example image">
-        <img class="item" src="https://picsum.photos/200/145" alt="Example image">
-        <img class="item" src="https://picsum.photos/200/146" alt="Example image">
       </div>
     </mj-raw>`,
   });

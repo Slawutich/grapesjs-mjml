@@ -24,10 +24,10 @@ export default (editor: Editor, opt: RequiredPluginOptions) => {
           property: 'padding',
           detached: true,
           properties: [
-            { name: 'Top', property: 'padding-top' },
-            { name: 'Right', property: 'padding-right' },
-            { name: 'Bottom', property: 'padding-bottom' },
-            { name: 'Left', property: 'padding-left' }
+            { name: 'Top', property: 'padding-top', units: ['px', '%'] },
+            { name: 'Right', property: 'padding-right', units: ['px', '%'] },
+            { name: 'Bottom', property: 'padding-bottom', units: ['px', '%'] },
+            { name: 'Left', property: 'padding-left', units: ['px', '%'] }
           ],
         }, {
           property: 'icon-size',
@@ -49,8 +49,11 @@ export default (editor: Editor, opt: RequiredPluginOptions) => {
         buildProps: ['font-family', 'font-size', 'font-weight', 'letter-spacing', 'color', 'line-height', 'text-align', 'align', 'text-decoration', 'font-style'],
         properties: [
           { name: 'Font', property: 'font-family' },
+          { name: 'Font size', property: 'font-size', units: ['px'] },
           { name: 'Weight', property: 'font-weight' },
+          { name: 'Letter spacing', property: 'letter-spacing', units: ['px', 'em'] },
           { name: 'Font color', property: 'color' },
+          { name: 'Line height', property: 'line-height', units: ['px', '%'] },
           {
             property: 'text-align',
             type: 'radio',
