@@ -3261,9 +3261,11 @@ var external_mjml_browser_default = /*#__PURE__*/__webpack_require__.n(external_
                             name: 'Background color',
                             property: 'container-background-color',
                             type: 'color',
+                            full: true
                         }, {
                             property: 'background-url',
                             type: 'file',
+                            full: true
                         }, {
                             property: 'border-radius',
                             properties: [

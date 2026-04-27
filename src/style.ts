@@ -101,9 +101,11 @@ export default (editor: Editor, opt: RequiredPluginOptions) => {
           name: 'Background color',
           property: 'container-background-color',
           type: 'color',
+          full: true
         }, {
           property: 'background-url',
           type: 'file',
+          full: true
         }, {
           property: 'border-radius',
           properties: [
