@@ -18,7 +18,8 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
         stylable: false,
         'style-default': {},
         'style': {},
-        'attributes': {}
+        'attributes': {},
+        traits: [],
       },
     },
     view: {

@@ -33,10 +33,10 @@ export default (editor: Editor, { opt, coreMjmlModel, coreMjmlView, sandboxEl }:
 
       renderStyle() {},
 
-      getTemplateFromMjml() {
+      async getTemplateFromMjml() {
         let mjmlTmpl = this.getMjmlTemplate();
         let innerMjml = this.getInnerMjmlTemplate();
-        const htmlOutput = mjmlConvert(opt.mjmlParser, `${mjmlTmpl.start}
+        const htmlOutput = await mjmlConvert(opt.mjmlParser, `${mjmlTmpl.start}
           ${innerMjml.start}${innerMjml.end}${mjmlTmpl.end}`, opt.fonts);
         let html = htmlOutput.html;
         let start = html.indexOf('<head>') + 6;

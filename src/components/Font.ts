@@ -40,10 +40,10 @@ export default (editor: Editor, { opt, coreMjmlModel, coreMjmlView, sandboxEl }:
 
       renderChildren() {},
 
-      getTemplateFromMjml() {
+      async getTemplateFromMjml() {
         const mjmlTmpl = this.getMjmlTemplate();
         const innerMjml = this.getInnerMjmlTemplate();
-        const htmlOutput = mjmlConvert(
+        const htmlOutput = await mjmlConvert(
           opt.mjmlParser,
           `${mjmlTmpl.start}
           ${innerMjml.start}${innerMjml.end}${mjmlTmpl.end}`,

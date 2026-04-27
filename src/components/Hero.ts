@@ -24,12 +24,24 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
         droppable: componentsToQuery([typeText, typeButton, typeImage, typeDivider, typeNavbar, typeSocial, typeSpacer]),
         stylable: [
           'background-color', 'background-height', 'background-position', 'background-url',
-          'background-width', 'css-class', 'height', 'mode', 'padding', 'padding-top',
+          'background-width', 'height', 'padding', 'padding-top',
           'padding-left', 'padding-right', 'padding-bottom', 'vertical-align', 'width'
         ],
         'style-default': {
           'vertical-align': 'top'
-        }
+        },
+        traits: [
+          //@TODO doesn't work
+          {
+            type: 'select',
+            label: 'Mode',
+            name: 'mode',
+            options: [
+              { value: 'fixed-height', name: 'Fixed height' },
+              { value: 'fluid-height', name: 'Fluid height' },
+            ]
+          }
+        ],
       },
     },
     view: {

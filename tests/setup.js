@@ -1,5 +1,3 @@
-import "regenerator-runtime/runtime";
-import "whatwg-fetch";
 import _ from "underscore";
 
 const localStorage = {

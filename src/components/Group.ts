@@ -21,7 +21,8 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
         ],
         'style-default': {
           'vertical-align': 'top'
-        }
+        },
+        traits: [],
       },
     },
     view: {

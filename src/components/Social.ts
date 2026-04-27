@@ -32,6 +32,7 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
           'line-height': '22px',
         },
         traits: [
+          // @TODO doesn't work
           {
             type: 'select',
             label: 'Mode',
@@ -67,14 +68,14 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
         return 'td';
       },
 
-      rerender() {
-        coreMjmlView.rerender.call(this);
-        this.model.components().models.forEach((item: any) => {
+      async rerender() {
+        await coreMjmlView.rerender.call(this);
+        await Promise.all(this.model.components().models.map(async (item: any) => {
           if (item.attributes.type !== typeSocialElement) {
             return;
           }
-          item.view.rerender();
-        });
+          await item.view.rerender();
+        }));
       },
 
       init() {

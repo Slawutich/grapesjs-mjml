@@ -31,8 +31,19 @@
 
 <body>
 
-  <div id="gjs" style="height:0px; overflow:hidden">
-    <mjml>
+  <div id="gjs" style="height:0px; overflow:hidden"></div>
+
+  <script type="text/javascript">
+    // Wait for the plugin to be injected by the dev server
+    window.onload = () => {
+      window.editor = grapesjs.init({
+        height: '100%',
+        noticeOnUnload: false,
+        storageManager: false,
+        container: '#gjs',
+        // MJML with <tr>/<td>/<th> must be passed as a string, not inline in the DOM.
+        // The browser's HTML parser strips table elements from inside custom elements like <mj-table>.
+        components: `<mjml>
       <mj-head>
         <mj-font name="Barlow" href="https://fonts.googleapis.com/css?family=Barlow"></mj-font>
 
@@ -43,7 +54,6 @@
         </mj-style>
       </mj-head>
       <mj-body>
-        <!-- Company Header -->
         <mj-section background-color="#f0f0f0">
           <mj-column border="10px solid #F45E43">
             <mj-text font-family="Barlow">A first line of text</mj-text>
@@ -51,7 +61,6 @@
           </mj-column>
         </mj-section>
 
-        <!-- Image Header -->
         <mj-section background-url="http://1.bp.blogspot.com/-TPrfhxbYpDY/Uh3Refzk02I/AAAAAAAALw8/5sUJ0UUGYuw/s1600/New+York+in+The+1960's+-+70's+(2).jpg"
           background-size="cover" background-repeat="no-repeat">
           <mj-column>
@@ -62,7 +71,6 @@
           </mj-column>
         </mj-section>
 
-        <!-- Intro text -->
         <mj-wrapper background-color="#ffe9f7" padding="10px">
           <mj-section background-color="#eaeffa">
             <mj-group background-color="#fffadd">
@@ -79,7 +87,6 @@
           </mj-section>
         </mj-wrapper>
 
-        <!-- Side image -->
         <mj-section background-color="white">
           <mj-column>
             <mj-image width="200px" src="https://designspell.files.wordpress.com/2012/01/sciolino-paris-bw.jpg" />
@@ -102,28 +109,26 @@
         </mj-section>
         <mj-raw>
           <div class="container">
-            <img class="item" src="https://source.unsplash.com/random/200x141?random" alt="Example image">
-            <img class="item" src="https://source.unsplash.com/random/200x142?random" alt="Example image">
-            <img class="item" src="https://source.unsplash.com/random/200x143?random" alt="Example image">
-            <img class="item" src="https://source.unsplash.com/random/200x144?random" alt="Example image">
-            <img class="item" src="https://source.unsplash.com/random/200x145?random" alt="Example image">
-            <img class="item" src="https://source.unsplash.com/random/200x146?random" alt="Example image">
+            <img class="item" src="https://picsum.photos/200/141?random" alt="Example image">
+            <img class="item" src="https://picsum.photos/200/142?random" alt="Example image">
+            <img class="item" src="https://picsum.photos/200/143?random" alt="Example image">
+            <img class="item" src="https://picsum.photos/200/144?random" alt="Example image">
+            <img class="item" src="https://picsum.photos/200/145?random" alt="Example image">
+            <img class="item" src="https://picsum.photos/200/146?random" alt="Example image">
           </div>
         </mj-raw>
-        <!-- Icons -->
         <mj-section background-color="#fbfbfb">
           <mj-column>
-            <mj-image width="100px" src="http://191n.mj.am/img/191n/3s/x0l.png" />
+            <mj-image width="100px" src="https://picsum.photos/100/101" />
           </mj-column>
           <mj-column>
-            <mj-image width="100px" src="http://191n.mj.am/img/191n/3s/x01.png" />
+            <mj-image width="100px" src="https://picsum.photos/100/102" />
           </mj-column>
           <mj-column>
-            <mj-image width="100px" src="http://191n.mj.am/img/191n/3s/x0s.png" />
+            <mj-image width="100px" src="https://picsum.photos/100/103" />
           </mj-column>
         </mj-section>
 
-        <!-- Footer -->
         <mj-section background-color="#e7e7e7">
           <mj-column>
             <mj-button href="#">Hello There!</mj-button>
@@ -140,21 +145,8 @@
             </mj-social>
           </mj-column>
         </mj-section>
-        <!-- Footer -->
       </mj-body>
-    </mjml>
-  </div>
-
-
-  <script type="text/javascript">
-    // Wait for the plugin to be injected by the dev server
-    window.onload = () => {
-      window.editor = grapesjs.init({
-        height: '100%',
-        noticeOnUnload: false,
-        storageManager: false,
-        fromElement: true,
-        container: '#gjs',
+    </mjml>`,
 
         plugins: ['grapesjs-mjml'],
         pluginsOpts: {

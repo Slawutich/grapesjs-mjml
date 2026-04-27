@@ -54,8 +54,8 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
               { value: 'xing', name: 'Xing' },
             ]
           },
-          { name: 'src' },
-          { name: 'href' },
+          'src', 'alt', 'title', // image
+          'href', 'rel' // link
         ],
       },
     },

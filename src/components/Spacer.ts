@@ -19,6 +19,7 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
         droppable: false,
         'style-default': { height: '20px' },
         stylable: ['height', 'container-background-color'],
+        traits: [],
         void: false,
       },
     },

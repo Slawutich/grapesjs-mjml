@@ -3,7 +3,7 @@ import { RequiredPluginOptions } from '.';
 
 export default (editor: Editor, opts: RequiredPluginOptions) => {
   const { Blocks } = editor;
-  const imagePlaceholderSrc = opts.imagePlaceholderSrc || 'https://via.placeholder.com/350x250/78c5d6/fff';
+  const imagePlaceholderSrc = opts.imagePlaceholderSrc || 'https://picsum.photos/350/250';
   const socialIcon = `<svg viewBox="0 0 24 24">
     <path fill="currentColor" d="M18,16.08C17.24,16.08 16.56,16.38 16.04,16.85L8.91,12.7C8.96,12.47 9,12.24 9,12C9,11.76 8.96,11.53 8.91,11.3L15.96,7.19C16.5,7.69 17.21,8 18,8A3,3 0 0,0 21,5A3,3 0 0,0 18,2A3,3 0 0,0 15,5C15,5.24 15.04,5.47 15.09,5.7L8.04,9.81C7.5,9.31 6.79,9 6,9A3,3 0 0,0 3,12A3,3 0 0,0 6,15C6.79,15 7.5,14.69 8.04,14.19L15.16,18.34C15.11,18.55 15.08,18.77 15.08,19C15.08,20.61 16.39,21.91 18,21.91C19.61,21.91 20.92,20.61 20.92,19A2.92,2.92 0 0,0 18,16.08Z" />
   </svg>`;
@@ -19,8 +19,7 @@ export default (editor: Editor, opts: RequiredPluginOptions) => {
     });
   };
 
-  // @ts-ignore
-  const getI18nLabel = (label: string) => editor.I18n.t(`grapesjs-mjml.components.names.${label}`)
+  const getI18nLabel = (label: string) => editor.I18n.t(`grapesjs-mjml.components.names.${label}`);
 
   addBlock('mj-1-column', {
     label: getI18nLabel('oneColumn'),
@@ -31,6 +30,23 @@ export default (editor: Editor, opts: RequiredPluginOptions) => {
         <mj-column><mj-text>Content 1</mj-text></mj-column>
       </mj-section>`,
   });
+
+  // addBlock('mj-accordion', {
+  //   label: 'Accordion',
+  //   media: `<svg viewBox="0 0 24 24">
+  //     <path fill="currentColor" d="M4 5H20V7H4V5M4 11H20V13H4V11M4 17H20V19H4V17M17.59 8.59L19 10L15 14L11 10L12.41 8.59L15 11.17L17.59 8.59Z" />
+  //   </svg>`,
+  //   content: `<mj-accordion>
+  //     <mj-accordion-element>
+  //       <mj-accordion-title>What is included?</mj-accordion-title>
+  //       <mj-accordion-text>Insurance, doorstep delivery, and a 7-day return window.</mj-accordion-text>
+  //     </mj-accordion-element>
+  //     <mj-accordion-element>
+  //       <mj-accordion-title>How fast can I test drive?</mj-accordion-title>
+  //       <mj-accordion-text>Most metro areas have same-week availability.</mj-accordion-text>
+  //     </mj-accordion-element>
+  //   </mj-accordion>`,
+  // });
 
   addBlock('mj-2-columns', {
     label: getI18nLabel('twoColumn'),
@@ -71,6 +87,18 @@ export default (editor: Editor, opts: RequiredPluginOptions) => {
     </svg>`,
     content: '<mj-button>Button</mj-button>',
   });
+
+  // addBlock('mj-carousel', {
+  //   label: 'Carousel',
+  //   media: `<svg viewBox="0 0 24 24">
+  //     <path fill="currentColor" d="M2 6A2 2 0 0 1 4 4H20A2 2 0 0 1 22 6V18A2 2 0 0 1 20 20H4A2 2 0 0 1 2 18V6M4 6V18H20V6H4M9 8L15 12L9 16V8Z" />
+  //   </svg>`,
+  //   content: `<mj-carousel>
+  //     <mj-carousel-image src="${imagePlaceholderSrc}" />
+  //     <mj-carousel-image src="https://via.placeholder.com/350x250/f4a261/ffffff" />
+  //     <mj-carousel-image src="https://via.placeholder.com/350x250/2a9d8f/ffffff" />
+  //   </mj-carousel>`,
+  // });
 
   addBlock('mj-image', {
     label: getI18nLabel('image'),
@@ -143,27 +171,46 @@ export default (editor: Editor, opts: RequiredPluginOptions) => {
       <mj-text padding="20px" color="#ffffff" font-family="Helvetica" align="center" font-size="45px" line-height="45px" font-weight="900">
         GO TO SPACE
       </mj-text>
-      <mj-button href="https://mjml.io/" align="center">
+      <mj-button align="center">
         ORDER YOUR TICKET NOW
       </mj-button>
     </mj-hero>`,
   });
+
+  // addBlock('mj-table', {
+  //   label: 'Table',
+  //   media: `<svg viewBox="0 0 24 24">
+  //     <path fill="currentColor" d="M3 3H21A1 1 0 0 1 22 4V20A1 1 0 0 1 21 21H3A1 1 0 0 1 2 20V4A1 1 0 0 1 3 3M4 5V9H10V5H4M12 5V9H20V5H12M4 11V19H10V11H4M12 11V19H20V11H12Z" />
+  //   </svg>`,
+  //   content: `<mj-table>
+  //     <tr style="border-bottom:1px solid #e2e8f0;text-align:left;">
+  //       <th style="padding:8px;">Model</th>
+  //       <th style="padding:8px;">Powertrain</th>
+  //       <th style="padding:8px;">Price</th>
+  //     </tr>
+  //     <tr>
+  //       <td style="padding:8px;">Tesla Model 3</td>
+  //       <td style="padding:8px;">Electric</td>
+  //       <td style="padding:8px;">$38,900</td>
+  //     </tr>
+  //   </mj-table>`,
+  // });
 
   addBlock('mj-wrapper', {
     label: getI18nLabel('wrapper'),
     media: `<svg viewBox="0 0 24 24">
         <path fill="currentColor" d="M18 2H6C4.89 2 4 2.9 4 4V20C4 21.11 4.89 22 6 22H18C19.11 22 20 21.11 20 20V4C20 2.9 19.11 2 18 2M18 20H6V16H18V20M18 8H6V4H18V8Z" />
     </svg>`,
-    content: `<mj-wrapper border="1px solid #000000" padding="50px 30px">
-      <mj-section border-top="1px solid #aaaaaa" border-left="1px solid #aaaaaa" border-right="1px solid #aaaaaa" padding="20px">
+    content: `<mj-wrapper>
+      <mj-section padding="20px">
         <mj-column>
           <mj-image padding="0" src="${imagePlaceholderSrc}" />
         </mj-column>
       </mj-section>
-      <mj-section border-left="1px solid #aaaaaa" border-right="1px solid #aaaaaa" padding="20px" border-bottom="1px solid #aaaaaa">
+      <mj-section padding="20px">
         <mj-column border="1px solid #dddddd">
           <mj-text padding="20px"> First line of text </mj-text>
-          <mj-divider border-width="1px" border-style="dashed" border-color="lightgrey" padding="0 20px" />
+          <mj-divider border-width="1px" border-style="dashed" border-color="lightgrey" padding="0 20px"></mj-divider>
           <mj-text padding="20px"> Second line of text </mj-text>
         </mj-column>
       </mj-section>
@@ -176,13 +223,9 @@ export default (editor: Editor, opts: RequiredPluginOptions) => {
         <path fill="currentColor" d="M12,17.56L16.07,16.43L16.62,10.33H9.38L9.2,8.3H16.8L17,6.31H7L7.56,12.32H14.45L14.22,14.9L12,15.5L9.78,14.9L9.64,13.24H7.64L7.93,16.43L12,17.56M4.07,3H19.93L18.5,19.2L12,21L5.5,19.2L4.07,3Z" />
     </svg>`,
     content: `<mj-raw>
-      <div class="container">
-        <img class="item" src="https://source.unsplash.com/random/200x141" alt="Example image">
-        <img class="item" src="https://source.unsplash.com/random/200x142" alt="Example image">
-        <img class="item" src="https://source.unsplash.com/random/200x143" alt="Example image">
-        <img class="item" src="https://source.unsplash.com/random/200x144" alt="Example image">
-        <img class="item" src="https://source.unsplash.com/random/200x145" alt="Example image">
-        <img class="item" src="https://source.unsplash.com/random/200x146" alt="Example image">
+      <div style="display: flex;justify-content: center;">
+        <img class="item" src="https://picsum.photos/200/141" alt="Example image">
+        <img class="item" src="https://picsum.photos/200/142" alt="Example image">
       </div>
     </mj-raw>`,
   });

@@ -46,6 +46,7 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
           'font-size': '13px',
           align: 'left',
         },
+        traits: []
       },
     },
 
@@ -74,8 +75,9 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
       /**
        * Prevent content repeating
        */
-      rerender() {
+      async rerender() {
         this.render();
+        return await this.__renderPromise;
       },
 
       /**

@@ -1,10 +1,10 @@
 import type { Editor } from 'grapesjs';
 import { MJMLParsingOptions } from "mjml-core";
-import { MjmlParser } from "./parser";
+import { MjmlParser, MjmlParserOutput } from "./parser";
 
 export const isComponentType = (type: string) => (el: Element) => (el.tagName || '').toLowerCase() === type;
 
-export function mjmlConvert (parser: MjmlParser, mjml: string, fonts: Record<string, string>, opts: Partial<MJMLParsingOptions> = {}) {
+export async function mjmlConvert (parser: MjmlParser, mjml: string, fonts: Record<string, string>, opts: Partial<MJMLParsingOptions> = {}): Promise<MjmlParserOutput> {
   const options: MJMLParsingOptions = {
     useMjmlConfigOptions: false,
     mjmlConfigPath: undefined,
@@ -18,7 +18,7 @@ export function mjmlConvert (parser: MjmlParser, mjml: string, fonts: Record<str
     options.fonts = fonts;
   }
 
-  return parser(mjml, options);
+  return await Promise.resolve(parser(mjml, options));
 }
 
 export const componentsToQuery = (cmps: string | string[]): string => {
@@ -31,7 +31,7 @@ export const getName = (editor: Editor, name: string): string => {
 };
 
 export function debounce<T extends (...params: any) => any>(clb: T, wait: number) {
-  let timeout: NodeJS.Timeout;
+  let timeout: number;
   return function(this: any, ...args: IArguments[]) {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
@@ -39,4 +39,76 @@ export function debounce<T extends (...params: any) => any>(clb: T, wait: number
       clb.apply(this, args);
     }, wait);
   } as T;
+}
+
+/**
+ * Expand CSS shorthand properties into their longhand equivalents.
+ * Covers padding, margin, border-radius, border, and border-{side}.
+ * Unknown properties pass through unchanged.
+ */
+export function expandShorthand(attrs: Record<string, string>): Record<string, string> {
+  const result: Record<string, string> = {};
+
+  for (const [key, value] of Object.entries(attrs)) {
+    const expanded = expandProperty(key, value);
+    if (expanded) {
+      Object.assign(result, expanded);
+    } else {
+      result[key] = value;
+    }
+  }
+
+  return result;
+}
+
+function splitValues(value: string): string[] {
+  return value.trim().split(/\s+/);
+}
+
+function expand4Sides(
+  value: string,
+  sides: [string, string, string, string],
+): Record<string, string> {
+  const parts = splitValues(value);
+  const [top, right, bottom, left] = sides;
+  switch (parts.length) {
+  case 1:
+    return { [top]: parts[0], [right]: parts[0], [bottom]: parts[0], [left]: parts[0] };
+  case 2:
+    return { [top]: parts[0], [right]: parts[1], [bottom]: parts[0], [left]: parts[1] };
+  case 3:
+    return { [top]: parts[0], [right]: parts[1], [bottom]: parts[2], [left]: parts[1] };
+  case 4:
+  default:
+    return { [top]: parts[0], [right]: parts[1], [bottom]: parts[2], [left]: parts[3] };
+  }
+}
+
+function expandProperty(prop: string, value: string): Record<string, string> | null {
+  switch (prop) {
+  case 'padding':
+    return expand4Sides(value, [
+      'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
+    ]);
+  case 'margin':
+    return expand4Sides(value, [
+      'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
+    ]);
+  case 'border':
+  case 'border-top':
+  case 'border-right':
+  case 'border-bottom':
+  case 'border-left': {
+    const parts = splitValues(value);
+    const prefix = prop === 'border' ? 'border' : prop;
+    const res: Record<string, string> = {};
+    // CSS border shorthand: <width> <style> <color>
+    if (parts[0]) res[`${prefix}-width`] = parts[0];
+    if (parts[1]) res[`${prefix}-style`] = parts[1];
+    if (parts[2]) res[`${prefix}-color`] = parts.slice(2).join(' ');
+    return Object.keys(res).length ? res : null;
+  }
+  default:
+    return null;
+  }
 };

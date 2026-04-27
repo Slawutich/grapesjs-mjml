@@ -38,7 +38,7 @@ export default (editor:  Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugi
           'padding-left': '25px',
           'align': 'center',
         },
-        traits: ['href'],
+        traits: ['href', 'title', 'rel'],
         // 'container-background-color', 'inner-padding'
       },
     },
@@ -68,8 +68,9 @@ export default (editor:  Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugi
       /**
        * Prevent content repeating
        */
-       rerender() {
+      async rerender() {
         this.render();
+        return await this.__renderPromise;
       },
     },
   });

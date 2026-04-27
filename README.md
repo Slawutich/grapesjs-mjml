@@ -53,7 +53,7 @@ Supported MJML components (using default mjml-browser parser):
 |`resetDevices`|Clean all previous devices and set a new one for mobile|`true`|
 |`hideSelector`|Hide the default selector manager|`true`|
 |`useXmlParser`|Experimental: use XML parser instead of HTML. This should allow importing void MJML elements (without closing tags) like `<mj-image/>`|`false`|
-|`columnsPadding`|Column padding (this way it's easier to select columns)|`10px 0`|
+|`columnsPadding`|Column padding (this way it's easier to select columns)|`''`|
 |`useCustomTheme`|Load custom preset theme|`true`|
 
 

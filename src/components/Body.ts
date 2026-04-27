@@ -23,6 +23,7 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
         highlightable: false,
         'style-default': { 'width': '600px' },
         stylable: [ 'width', 'background-color' ],
+        traits: [],
       },
     },
 
@@ -51,14 +52,14 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
         this.el.setAttribute('style', `${this.el.getAttribute('style') + this.attributes.style}`);
       },
 
-      rerender() {
-        coreMjmlView.rerender.call(this);
-        this.model.components().models.forEach((item: any) => {
+      async rerender() {
+        await coreMjmlView.rerender.call(this);
+        await Promise.all(this.model.components().models.map(async (item: any) => {
           if ([typeSection, typeRaw].indexOf(item.attributes.type) < 0) {
             return;
           }
-          item.view.rerender();
-        });
+          await item.view.rerender();
+        }));
       },
     },
   });

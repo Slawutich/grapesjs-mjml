@@ -20,10 +20,10 @@ export default (editor: Editor, opts: RequiredPluginOptions) => {
     return `${opts.preMjml}${editor.getHtml().trim()}${opts.postMjml}`;
   });
 
-  Commands.add(cmdGetMjmlToHtml, (ed, _, opt) => {
+  Commands.add(cmdGetMjmlToHtml, async (ed, _, opt) => {
     const { mjml, ...rest } = (opt || {}) as CommandOptionsMjmlToHtml;
     const mjmlToParse = mjml || Commands.run(cmdGetMjml);
-    return mjmlConvert(opts.mjmlParser, mjmlToParse, opts.fonts, rest);
+    return await mjmlConvert(opts.mjmlParser, mjmlToParse, opts.fonts, rest);
   });
 
   openExportMjml(editor, opts, cmdOpenExport);
