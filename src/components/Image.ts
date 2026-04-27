@@ -47,7 +47,13 @@ export default (editor: Editor, { coreMjmlModel, coreMjmlView }: ComponentPlugin
           align: 'center',
         },
         traits: [
-          'src', 'alt', 'title', // image
+          {
+            type: 'file',
+            label: 'src',
+            name: 'src',
+            changeProp: true,
+          },
+          'alt', 'title', // image
           'href', 'rel',  // link
           // @TODO doesn't work
           {

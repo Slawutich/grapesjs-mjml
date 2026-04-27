@@ -5,6 +5,7 @@ import loadComponents from './components';
 import mjml2html from './components/parser';
 import en from './locale/en';
 import loadPanels from './panels';
+import loadTraits from './traits';
 import loadStyle from './style';
 import { PluginOptions } from './types';
 import { debounce, expandShorthand } from './components/utils';
@@ -170,7 +171,7 @@ const plugin: Plugin<PluginOptions> = (editor, opt = {}) => {
     ...opts.i18n,
   });
 
-  [loadBlocks, loadComponents, loadCommands, loadPanels, loadStyle].forEach((module) => module(editor, opts));
+  [loadBlocks, loadComponents, loadCommands, loadPanels, loadTraits, loadStyle].forEach((module) => module(editor, opts));
 
   editor.on('load', () => {
     applyMjAttributes(editor);
