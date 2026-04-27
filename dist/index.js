@@ -7,7 +7,7 @@
 		exports["grapesjs-mjml"] = factory(require("mjml-browser"));
 	else
 		root["grapesjs-mjml"] = factory(root["mjml-browser"]);
-})(self, (__WEBPACK_EXTERNAL_MODULE__415__) => {
+})(Object(typeof globalThis !== 'undefined' ? globalThis : (typeof window !== 'undefined' ? window : this)), (__WEBPACK_EXTERNAL_MODULE__415__) => {
 return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
@@ -93,9 +93,7 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  applyMjAttributes: () => (/* binding */ applyMjAttributes),
-  "default": () => (/* binding */ src),
-  normalizeMjmlHead: () => (/* binding */ normalizeMjmlHead)
+  "default": () => (/* binding */ src)
 });
 
 ;// ./src/blocks.ts
@@ -890,8 +888,7 @@ const Column_type = 'mj-column';
             async getTemplateFromMjml() {
                 const mjmlTmpl = this.getMjmlTemplate();
                 const innerMjml = this.getInnerMjmlTemplate();
-                const mjmlStart = this.injectDocumentHead(mjmlTmpl.start);
-                const htmlOutput = await mjmlConvert(opt.mjmlParser, `${mjmlStart}
+                const htmlOutput = await mjmlConvert(opt.mjmlParser, `${mjmlTmpl.start}
           ${innerMjml.start}${innerMjml.end}${mjmlTmpl.end}`, opt.fonts);
                 const html = htmlOutput.html;
                 // I need styles for responsive columns
@@ -1399,8 +1396,7 @@ const NavBar_type = 'mj-navbar';
             async getTemplateFromMjml() {
                 const mjmlTmpl = this.getMjmlTemplate();
                 const innerMjml = this.getInnerMjmlTemplate();
-                const mjmlStart = this.injectDocumentHead(mjmlTmpl.start);
-                const htmlOutput = await mjmlConvert(opt.mjmlParser, `${mjmlStart}
+                const htmlOutput = await mjmlConvert(opt.mjmlParser, `${mjmlTmpl.start}
           ${innerMjml.start}${innerMjml.end}${mjmlTmpl.end}`, opt.fonts);
                 const html = htmlOutput.html;
                 // I need styles for hamburger
@@ -2854,36 +2850,6 @@ const typeHeaderCell = 'th';
                 end: `</mjml>`,
             };
         },
-        isInsideHead() {
-            let component = this.model;
-            while (component) {
-                if (component.get?.('type') === 'mj-head') {
-                    return true;
-                }
-                component = component.parent?.();
-            }
-            return false;
-        },
-        getDocumentMjmlHead() {
-            if (this.isInsideHead()) {
-                return '';
-            }
-            const wrapper = editor.Components.getWrapper();
-            const mjml = wrapper?.components().find((component) => component.get('type') === 'mjml');
-            const head = mjml?.components().find((component) => component.get('type') === 'mj-head');
-            return head ? head.toHTML() : '';
-        },
-        injectDocumentHead(start) {
-            const head = this.getDocumentMjmlHead();
-            if (!head || /<mj-head[\s>]/.test(start)) {
-                return start;
-            }
-            const mjmlOpen = start.match(/^<mjml[^>]*>/);
-            if (!mjmlOpen) {
-                return start;
-            }
-            return `${mjmlOpen[0]}${head}${start.slice(mjmlOpen[0].length)}`;
-        },
         /**
          * Build the MJML of the current component
          */
@@ -2913,8 +2879,7 @@ const typeHeaderCell = 'th';
         async getTemplateFromMjml() {
             const mjmlTmpl = this.getMjmlTemplate();
             const innerMjml = this.getInnerMjmlTemplate();
-            const mjmlStart = this.injectDocumentHead(mjmlTmpl.start);
-            const mjml = `${mjmlStart}${innerMjml.start}${innerMjml.end}${mjmlTmpl.end}`;
+            const mjml = `${mjmlTmpl.start}${innerMjml.start}${innerMjml.end}${mjmlTmpl.end}`;
             const htmlOutput = await mjmlConvert(opt.mjmlParser, mjml, opt.fonts);
             let html = htmlOutput.html;
             html = html.replace(/<body(.*)>/, '<body>');
@@ -3314,37 +3279,6 @@ var external_mjml_browser_default = /*#__PURE__*/__webpack_require__.n(external_
 
 
 
-const headComponentTypes = new Set([
-    'mj-attributes',
-    'mj-breakpoint',
-    'mj-font',
-    'mj-html-attributes',
-    'mj-preview',
-    'mj-style',
-    'mj-title',
-]);
-const normalizeMjmlHead = (editor) => {
-    const wrapper = editor.Components.getWrapper();
-    const mjml = wrapper?.components().find((component) => component.get('type') === 'mjml');
-    if (!mjml) {
-        return;
-    }
-    const components = mjml.components();
-    const head = components.find((component) => component.get('type') === 'mj-head');
-    const body = components.find((component) => component.get('type') === 'mj-body');
-    if (!head || !body) {
-        return;
-    }
-    const orphanHeadComponents = components.filter((component) => headComponentTypes.has(component.get('type')));
-    if (!orphanHeadComponents.length) {
-        return;
-    }
-    orphanHeadComponents.forEach((component) => {
-        component.remove({ temporary: true });
-        head.append(component, { at: head.components().length });
-    });
-    body.trigger('change:components');
-};
 /**
  * After all components are loaded, read mj-attributes from mj-head
  * and apply their values to body components. This is needed because
@@ -3485,13 +3419,11 @@ const src_plugin = (editor, opt = {}) => {
     });
     [blocks, components, commands, panels, style].forEach((module) => module(editor, opts));
     editor.on('load', () => {
-        normalizeMjmlHead(editor);
         applyMjAttributes(editor);
     });
     // Automatically apply MJML head logic whenever the component tree is rebuilt
     // (e.g. external editor.setComponents() calls).
     const debouncedMjmlApply = debounce(() => {
-        normalizeMjmlHead(editor);
         applyMjAttributes(editor);
     }, 0);
     editor.on('component:add', (component) => {

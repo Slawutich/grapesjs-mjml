@@ -131,16 +131,6 @@ export type PluginOptions = {
 	 */
 	useCustomTheme?: boolean;
 };
-export declare const normalizeMjmlHead: (editor: Parameters<Plugin<PluginOptions>>[0]) => void;
-/**
- * After all components are loaded, read mj-attributes from mj-head
- * and apply their values to body components. This is needed because
- * during component init(), the component tree is not yet fully assembled,
- * so mj-attributes cannot be read at that time.
- *
- * For components added later (D&D), init() handles it via getMjAttributeDefaults.
- */
-export declare const applyMjAttributes: (editor: Parameters<Plugin<PluginOptions>>[0]) => void;
 export type RequiredPluginOptions = Required<PluginOptions>;
 declare const plugin: Plugin<PluginOptions>;
 

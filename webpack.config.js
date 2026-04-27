@@ -5,11 +5,11 @@ export default ({ config }) => {
 
   return {
     ...config,
-    output: {
-      library: 'grapesjs-mjml',
-      libraryTarget: 'umd', // UMD or ESM for best compatibility with Vite
-      filename: 'index.js',
-    },
+    // output: {
+    //   library: 'grapesjs-mjml',
+    //   libraryTarget: 'umd', // UMD or ESM for best compatibility with Vite
+    //   filename: 'index.js',
+    // },
     externals: {
       ...config.externals,
       ...(isBuild ? {
@@ -17,6 +17,7 @@ export default ({ config }) => {
       } : {})
     },
     optimization: {
+      ...config.optimization,
       minimize: false
     }, 
   };

@@ -249,48 +249,6 @@ export default (editor: Editor, opt: RequiredPluginOptions) => {
       };
     },
 
-    isInsideHead() {
-      let component = this.model;
-
-      while (component) {
-        if (component.get?.('type') === 'mj-head') {
-          return true;
-        }
-
-        component = component.parent?.();
-      }
-
-      return false;
-    },
-
-    getDocumentMjmlHead() {
-      if (this.isInsideHead()) {
-        return '';
-      }
-
-      const wrapper = editor.Components.getWrapper();
-      const mjml = wrapper?.components().find((component: any) => component.get('type') === 'mjml');
-      const head = mjml?.components().find((component: any) => component.get('type') === 'mj-head');
-
-      return head ? head.toHTML() : '';
-    },
-
-    injectDocumentHead(start: string) {
-      const head = this.getDocumentMjmlHead();
-
-      if (!head || /<mj-head[\s>]/.test(start)) {
-        return start;
-      }
-
-      const mjmlOpen = start.match(/^<mjml[^>]*>/);
-
-      if (!mjmlOpen) {
-        return start;
-      }
-
-      return `${mjmlOpen[0]}${head}${start.slice(mjmlOpen[0].length)}`;
-    },
-
     /**
      * Build the MJML of the current component
      */
@@ -324,8 +282,7 @@ export default (editor: Editor, opt: RequiredPluginOptions) => {
     async getTemplateFromMjml() {
       const mjmlTmpl = this.getMjmlTemplate();
       const innerMjml = this.getInnerMjmlTemplate();
-      const mjmlStart = this.injectDocumentHead(mjmlTmpl.start);
-      const mjml = `${mjmlStart}${innerMjml.start}${innerMjml.end}${mjmlTmpl.end}`;
+      const mjml = `${mjmlTmpl.start}${innerMjml.start}${innerMjml.end}${mjmlTmpl.end}`;
       const htmlOutput = await mjmlConvert(opt.mjmlParser, mjml, opt.fonts);
       let html = htmlOutput.html;
       html = html.replace(/<body(.*)>/, '<body>');

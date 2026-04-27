@@ -52,10 +52,9 @@ export default (editor: Editor, { opt, coreMjmlModel, coreMjmlView, sandboxEl }:
       async getTemplateFromMjml() {
         const mjmlTmpl = this.getMjmlTemplate();
         const innerMjml = this.getInnerMjmlTemplate();
-        const mjmlStart = this.injectDocumentHead(mjmlTmpl.start);
         const htmlOutput = await mjmlConvert(
           opt.mjmlParser,
-          `${mjmlStart}
+          `${mjmlTmpl.start}
           ${innerMjml.start}${innerMjml.end}${mjmlTmpl.end}`,
           opt.fonts,
         );

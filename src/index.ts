@@ -9,46 +9,6 @@ import loadStyle from './style';
 import { PluginOptions } from './types';
 import { debounce, expandShorthand } from './components/utils';
 
-const headComponentTypes = new Set([
-  'mj-attributes',
-  'mj-breakpoint',
-  'mj-font',
-  'mj-html-attributes',
-  'mj-preview',
-  'mj-style',
-  'mj-title',
-]);
-
-export const normalizeMjmlHead = (editor: Parameters<Plugin<PluginOptions>>[0]) => {
-  const wrapper = editor.Components.getWrapper();
-  const mjml = wrapper?.components().find((component: any) => component.get('type') === 'mjml');
-
-  if (!mjml) {
-    return;
-  }
-
-  const components = mjml.components();
-  const head = components.find((component: any) => component.get('type') === 'mj-head');
-  const body = components.find((component: any) => component.get('type') === 'mj-body');
-
-  if (!head || !body) {
-    return;
-  }
-
-  const orphanHeadComponents = components.filter((component: any) => headComponentTypes.has(component.get('type')));
-
-  if (!orphanHeadComponents.length) {
-    return;
-  }
-
-  orphanHeadComponents.forEach((component: any) => {
-    component.remove({ temporary: true });
-    head.append(component, { at: head.components().length });
-  });
-
-  body.trigger('change:components');
-};
-
 /**
  * After all components are loaded, read mj-attributes from mj-head
  * and apply their values to body components. This is needed because
@@ -57,7 +17,7 @@ export const normalizeMjmlHead = (editor: Parameters<Plugin<PluginOptions>>[0]) 
  *
  * For components added later (D&D), init() handles it via getMjAttributeDefaults.
  */
-export const applyMjAttributes = (editor: Parameters<Plugin<PluginOptions>>[0]) => {
+const applyMjAttributes = (editor: Parameters<Plugin<PluginOptions>>[0]) => {
   const getMjAttributeDefaults = (editor as any).__getMjAttributeDefaults as
     ((type: string) => Record<string, string>) | undefined;
   if (!getMjAttributeDefaults) return;
@@ -213,14 +173,12 @@ const plugin: Plugin<PluginOptions> = (editor, opt = {}) => {
   [loadBlocks, loadComponents, loadCommands, loadPanels, loadStyle].forEach((module) => module(editor, opts));
 
   editor.on('load', () => {
-    normalizeMjmlHead(editor);
     applyMjAttributes(editor);
   });
 
   // Automatically apply MJML head logic whenever the component tree is rebuilt
   // (e.g. external editor.setComponents() calls).
   const debouncedMjmlApply = debounce(() => {
-    normalizeMjmlHead(editor);
     applyMjAttributes(editor);
   }, 0);
 

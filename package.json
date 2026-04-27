@@ -28,7 +28,6 @@
   "author": "Artur Arseniev",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "@types/mjml": "^5.0.0",
     "cheerio": "^1.2.0",
     "mjml-browser": "^5.1.0"
   },
@@ -43,6 +42,7 @@
     }
   },
   "devDependencies": {
+    "@types/mjml": "^5.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "@babel/cli": "^7.15.7",
     "@babel/preset-typescript": "^7.16.7",
